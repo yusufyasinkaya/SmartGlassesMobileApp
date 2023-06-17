@@ -15,6 +15,7 @@ limitations under the License.
 
 package org.tensorflow.lite.examples.detection.env;
 
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -30,7 +31,8 @@ public class BorderedText {
   private final Paint exteriorPaint;
   String textPos;
 
-  private final float textSize;
+
+  float textSize ; // Başlangıç değeri olarak 12.0 kullanıldı, istediğiniz değeri belirleyebilirsiniz
 
   /**
    * Creates a left-aligned bordered text object with a white interior, and a black exterior with
@@ -78,34 +80,52 @@ public class BorderedText {
     canvas.drawText(text, posX, posY, exteriorPaint);
     canvas.drawText(text, posX, posY, interiorPaint);
   }
-  private static final float LEFT_THRESHOLD = 0.3f; // Eşik değeri, nesnenin solda olduğunu belirlemek için kullanılır
-  private static final float RIGHT_THRESHOLD = 0.7f; // Eşik değeri, nesnenin sağda olduğunu belirlemek için kullanılır
+  private static final float CENTER_THRESHOLD = 0.5f; // Eşik değeri, nesnenin merkezde olduğunu belirlemek için kullanılır
+
   public String getObjectPosition(float xPos) {
-    if (xPos < LEFT_THRESHOLD) {
-      textPos="Solda";
+    if (xPos < CENTER_THRESHOLD) {
+      textPos = "Solda";
       return "Solda";
-    } else if (xPos > RIGHT_THRESHOLD) {
-      textPos="Sağda";
-      return "Sağda";
     } else {
-      textPos="Ortada";
-      return "Orta";
+      textPos = "Sağda";
+      return "Sağda";
     }
   }
-  public void drawText(
-      final Canvas canvas, final float posX, final float posY, String text, Paint bgPaint) {
 
-    text=getObjectPosition(posX)+" "+text;
+
+  public void drawText(
+          final Canvas canvas, final float posX, final float posY, String text, Paint bgPaint) {
 
     float width = exteriorPaint.measureText(text);
     float textSize = exteriorPaint.getTextSize();
+    float textX;
+
+
+    // Ekranı üçe bölerek metni orta bölgeye hizalama
+    float screenThird = canvas.getWidth() / 3.0f;
+
+    if (getObjectPosition(posX).equals("Solda")) {
+      // Sol tarafta ise metni orta bölgenin solunda çiz
+      textX = screenThird - width / 2.0f;
+    } else if (getObjectPosition(posX).equals("Sağda")) {
+      // Sağ tarafta ise metni orta bölgenin sağında çiz
+      textX = 2 * screenThird - width / 2.0f;
+    } else {
+      // Orta bölgede ise metni orta bölgede çiz
+      textX = canvas.getWidth() / 2.0f - width / 2.0f;
+    }
+
+    text = getObjectPosition(posX) + " " + text;
+
     Paint paint = new Paint(bgPaint);
     paint.setStyle(Paint.Style.FILL);
     paint.setAlpha(160);
-    canvas.drawRect(posX, (posY + (int) (textSize)), (posX + (int) (width)), posY, paint);
+    canvas.drawRect(textX, (posY + textSize), (textX + width), posY, paint);
 
-    canvas.drawText(text, posX, (posY + textSize), interiorPaint);
+    canvas.drawText(text, textX, (posY + textSize), interiorPaint);
   }
+
+
 
   public void drawLines(Canvas canvas, final float posX, final float posY, Vector<String> lines) {
     int lineNum = 0;
