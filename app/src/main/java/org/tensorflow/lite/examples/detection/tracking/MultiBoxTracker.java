@@ -86,7 +86,7 @@ public class MultiBoxTracker {
     textSizePx =
         TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, context.getResources().getDisplayMetrics());
-    borderedText = new BorderedText(textSizePx);
+    borderedText = new BorderedText(textSizePx, context);
   }
 
   public synchronized void setFrameConfiguration(

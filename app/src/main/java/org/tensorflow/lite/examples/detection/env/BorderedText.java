@@ -16,6 +16,7 @@ limitations under the License.
 package org.tensorflow.lite.examples.detection.env;
 
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,6 +24,10 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+
+import androidx.core.util.Pair;
+
+import java.util.Locale;
 import java.util.Vector;
 
 /** A class that encapsulates the tedious bits of rendering legible, bordered text onto a canvas. */
@@ -30,6 +35,7 @@ public class BorderedText {
   private final Paint interiorPaint;
   private final Paint exteriorPaint;
   String textPos;
+  private SpatialVocalizer sv;
 
 
   float textSize ; // Başlangıç değeri olarak 12.0 kullanıldı, istediğiniz değeri belirleyebilirsiniz
@@ -40,8 +46,9 @@ public class BorderedText {
    *
    * @param textSize text size in pixels
    */
-  public BorderedText(final float textSize) {
+  public BorderedText(final float textSize, Context context) {
     this(Color.WHITE, Color.BLACK, textSize);
+    sv = new SpatialVocalizer(context, new Locale("tr_TR"));
   }
 
   /**
@@ -79,6 +86,8 @@ public class BorderedText {
   public void drawText(final Canvas canvas, final float posX, final float posY, final String text) {
     canvas.drawText(text, posX, posY, exteriorPaint);
     canvas.drawText(text, posX, posY, interiorPaint);
+    Pair<Float, Float> ratio = getStereoRatio(canvas.getWidth(), posX);
+    sv.playText(text, ratio.first, ratio.second);
   }
   private static final float CENTER_THRESHOLD = 0.5f; // Eşik değeri, nesnenin merkezde olduğunu belirlemek için kullanılır
 
@@ -92,6 +101,10 @@ public class BorderedText {
     }
   }
 
+  public Pair<Float, Float> getStereoRatio(float totalX, float x) {
+    float ratio = x / totalX;
+    return new Pair<>(1-ratio, ratio);
+  }
 
   public void drawText(
           final Canvas canvas, final float posX, final float posY, String text, Paint bgPaint) {
@@ -99,7 +112,6 @@ public class BorderedText {
     float width = exteriorPaint.measureText(text);
     float textSize = exteriorPaint.getTextSize();
     float textX;
-
 
     // Ekranı üçe bölerek metni orta bölgeye hizalama
     float screenThird = canvas.getWidth() / 3.0f;
@@ -121,7 +133,6 @@ public class BorderedText {
     paint.setStyle(Paint.Style.FILL);
     paint.setAlpha(160);
     canvas.drawRect(textX, (posY + textSize), (textX + width), posY, paint);
-
     canvas.drawText(text, textX, (posY + textSize), interiorPaint);
   }
 

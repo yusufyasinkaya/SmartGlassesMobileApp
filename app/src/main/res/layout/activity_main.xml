@@ -10,24 +10,25 @@
 
     <Button
         android:id="@+id/cameraButton"
-        android:layout_width="164dp"
-        android:layout_height="168dp"
+        android:layout_width="244dp"
+        android:layout_height="84dp"
         android:text="Camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.153"
         tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="337dp"
         android:layout_height="292dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/yusuf" />
+        app:srcCompat="@drawable/ai_for_blind"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
