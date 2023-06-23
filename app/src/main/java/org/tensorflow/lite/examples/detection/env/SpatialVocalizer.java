@@ -24,6 +24,8 @@ import java.util.Queue;
 
 public class SpatialVocalizer {
 
+    public static SpatialVocalizer shared;
+
     private static final int languageSuccess = 0;
     private static final int languageError = -1;
     private static final String ttsFileName = "ttsAudioFile.wav";
@@ -108,7 +110,7 @@ public class SpatialVocalizer {
 
     private void playNext() {
         if (textQueue.size() > 0) {
-           // textToWav(textQueue.get(0));
+            textToWav(textQueue.get(0).first);
             textQueue.remove(0);
         }
     }
@@ -136,10 +138,6 @@ public class SpatialVocalizer {
 
         File path = appContext.getApplicationContext().getFilesDir();
         File ttsFile = new File(path, ttsFileName);
-
-        //this.leftChannel = leftChannel;
-        //this.rightChannel = rightChannel;
-        //textQueue.add(text);
         tts.synthesizeToFile(text, params, ttsFile, utrId);
     }
 
@@ -159,7 +157,6 @@ public class SpatialVocalizer {
     }
 
     private void playSound(byte[] audioData) {
-
         AudioTrack at = new AudioTrack.Builder()
                 .setAudioFormat(audioFormat)
                 .setAudioAttributes(audioAttributes)
@@ -187,7 +184,6 @@ public class SpatialVocalizer {
 
             }
         });
-
         at.play();
     }
 }

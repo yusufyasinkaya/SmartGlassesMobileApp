@@ -21,6 +21,7 @@ import android.widget.Toast;
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
 import org.tensorflow.lite.examples.detection.env.ImageUtils;
 import org.tensorflow.lite.examples.detection.env.Logger;
+import org.tensorflow.lite.examples.detection.env.SpatialVocalizer;
 import org.tensorflow.lite.examples.detection.env.Utils;
 import org.tensorflow.lite.examples.detection.tflite.Classifier;
 import org.tensorflow.lite.examples.detection.tflite.YoloV4Classifier;
@@ -29,6 +30,7 @@ import org.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 

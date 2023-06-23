@@ -24,6 +24,7 @@ import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import androidx.core.util.Pair;
 
@@ -35,7 +36,6 @@ public class BorderedText {
   private final Paint interiorPaint;
   private final Paint exteriorPaint;
   String textPos;
-  private SpatialVocalizer sv;
 
 
   float textSize ; // Başlangıç değeri olarak 12.0 kullanıldı, istediğiniz değeri belirleyebilirsiniz
@@ -48,7 +48,6 @@ public class BorderedText {
    */
   public BorderedText(final float textSize, Context context) {
     this(Color.WHITE, Color.BLACK, textSize);
-    sv = new SpatialVocalizer(context, new Locale("tr_TR"));
   }
 
   /**
@@ -86,19 +85,20 @@ public class BorderedText {
   public void drawText(final Canvas canvas, final float posX, final float posY, final String text) {
     canvas.drawText(text, posX, posY, exteriorPaint);
     canvas.drawText(text, posX, posY, interiorPaint);
-    Pair<Float, Float> ratio = getStereoRatio(canvas.getWidth(), posX);
-    sv.playText(text, ratio.first, ratio.second);
   }
   private static final float CENTER_THRESHOLD = 0.5f; // Eşik değeri, nesnenin merkezde olduğunu belirlemek için kullanılır
 
-  public String getObjectPosition(float xPos) {
-    if (xPos < CENTER_THRESHOLD) {
+  public String getObjectPosition(float xPos, float totalX) {
+    final float finalX = xPos / totalX;
+    if (finalX < CENTER_THRESHOLD) {
       textPos = "Solda";
       return "Solda";
     } else {
       textPos = "Sağda";
+
       return "Sağda";
     }
+
   }
 
   public Pair<Float, Float> getStereoRatio(float totalX, float x) {
@@ -116,24 +116,30 @@ public class BorderedText {
     // Ekranı üçe bölerek metni orta bölgeye hizalama
     float screenThird = canvas.getWidth() / 3.0f;
 
-    if (getObjectPosition(posX).equals("Solda")) {
+    if (getObjectPosition(posX, canvas.getWidth()).equals("Solda")) {
       // Sol tarafta ise metni orta bölgenin solunda çiz
       textX = screenThird - width / 2.0f;
-    } else if (getObjectPosition(posX).equals("Sağda")) {
+    } else if (getObjectPosition(posX, canvas.getWidth()).equals("Sağda")) {
       // Sağ tarafta ise metni orta bölgenin sağında çiz
       textX = 2 * screenThird - width / 2.0f;
     } else {
       // Orta bölgede ise metni orta bölgede çiz
       textX = canvas.getWidth() / 2.0f - width / 2.0f;
     }
-
-    text = getObjectPosition(posX) + " " + text;
+    if (SpatialVocalizer.shared != null) {
+      float x = posX / canvas.getWidth();
+      SpatialVocalizer.shared.playText(text, 1.0f - x, x);
+    }
+    text = getObjectPosition(posX, canvas.getWidth()) + " " + text;
 
     Paint paint = new Paint(bgPaint);
     paint.setStyle(Paint.Style.FILL);
     paint.setAlpha(160);
     canvas.drawRect(textX, (posY + textSize), (textX + width), posY, paint);
     canvas.drawText(text, textX, (posY + textSize), interiorPaint);
+    Pair<Float, Float> ratio = getStereoRatio(canvas.getWidth(), posX);
+    Log.d("DRAWTEXT", String.valueOf(posX / canvas.getWidth()));
+
   }
 
 

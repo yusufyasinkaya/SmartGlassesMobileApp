@@ -16,6 +16,7 @@
 
 package org.tensorflow.lite.examples.detection;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -35,12 +36,14 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
 import org.tensorflow.lite.examples.detection.customview.OverlayView.DrawCallback;
 import org.tensorflow.lite.examples.detection.env.BorderedText;
 import org.tensorflow.lite.examples.detection.env.ImageUtils;
 import org.tensorflow.lite.examples.detection.env.Logger;
+import org.tensorflow.lite.examples.detection.env.SpatialVocalizer;
 import org.tensorflow.lite.examples.detection.tflite.Classifier;
 import org.tensorflow.lite.examples.detection.tflite.YoloV4Classifier;
 import org.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
@@ -50,6 +53,9 @@ import org.tensorflow.lite.examples.detection.tracking.MultiBoxTracker;
  * objects.
  */
 public class DetectorActivity extends CameraActivity implements OnImageAvailableListener {
+
+    public static Context ctx;
+
     private static final Logger LOGGER = new Logger();
 
     private static final int TF_OD_API_INPUT_SIZE = 416;
@@ -90,6 +96,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         final float textSizePx =
                 TypedValue.applyDimension(
                         TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, getResources().getDisplayMetrics());
+        ctx = this;
+        SpatialVocalizer.shared = new SpatialVocalizer(this, new Locale("tr_TR"));
+
         borderedText = new BorderedText(textSizePx, this);
         borderedText.setTypeface(Typeface.MONOSPACE);
 

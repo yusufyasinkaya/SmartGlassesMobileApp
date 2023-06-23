@@ -10,8 +10,8 @@
 
     <Button
         android:id="@+id/cameraButton"
-        android:layout_width="244dp"
-        android:layout_height="84dp"
+        android:layout_width="311dp"
+        android:layout_height="326dp"
         android:text="Camera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
