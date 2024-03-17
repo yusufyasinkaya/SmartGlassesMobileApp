@@ -52,6 +52,22 @@ public class SpatialVocalizer {
 
     private ArrayList<Pair<String, Pair<Float, Float>>> textQueue = new ArrayList<Pair<String, Pair<Float, Float>>>();
 
+    Runnable soundQueueRunnable = () -> {
+        while(true) {
+            try {
+                if (!textQueue.isEmpty()) {
+                    textToWav(textQueue.get(0).first);
+                    textQueue.remove(0);
+                    Thread.currentThread().wait();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    Thread soundQueueThread = new Thread(soundQueueRunnable);
+
     public SpatialVocalizer(Context context, Locale locale) {
         tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
@@ -71,6 +87,8 @@ public class SpatialVocalizer {
                 }
             }
         });
+
+        soundQueueThread.start();
     }
 
     public int setLanguage(Locale locale) {
@@ -108,11 +126,8 @@ public class SpatialVocalizer {
         });
     }
 
-    private void playNext() {
-        if (textQueue.size() > 0) {
-            textToWav(textQueue.get(0).first);
-            textQueue.remove(0);
-        }
+    private void playQueue() {
+
     }
 
     public void playText(
@@ -121,7 +136,7 @@ public class SpatialVocalizer {
             float rightChannel
     ) {
         textQueue.add(new Pair<>(text, new Pair<>(leftChannel, rightChannel)));
-        textToWav(text);
+        //textToWav(text);
     }
 
     private Pair<Float, Float> calculateChannels(float totalX, float xPos) {
@@ -176,6 +191,7 @@ public class SpatialVocalizer {
         at.setPlaybackPositionUpdateListener(new AudioTrack.OnPlaybackPositionUpdateListener() {
             @Override
             public void onMarkerReached(AudioTrack audioTrack) {
+                soundQueueThread.notify();
                 Log.d(Class_TAG, "ON PLAY END");
             }
 

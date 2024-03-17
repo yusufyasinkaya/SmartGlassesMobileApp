@@ -16,6 +16,7 @@ limitations under the License.
 package org.tensorflow.lite.examples.detection.env;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -88,16 +89,10 @@ public class BorderedText {
   }
   private static final float CENTER_THRESHOLD = 0.5f; // Eşik değeri, nesnenin merkezde olduğunu belirlemek için kullanılır
 
+  @SuppressLint("DefaultLocale")
   public String getObjectPosition(float xPos, float totalX) {
     final float finalX = xPos / totalX;
-    if (finalX < CENTER_THRESHOLD) {
-      textPos = "Solda";
-      return "Solda";
-    } else {
-      textPos = "Sağda";
-
-      return "Sağda";
-    }
+    return String.format("%.2f", finalX * 90f - 45f);
 
   }
 
@@ -130,6 +125,7 @@ public class BorderedText {
       float x = posX / canvas.getWidth();
       SpatialVocalizer.shared.playText(text, 1.0f - x, x);
     }
+
     text = getObjectPosition(posX, canvas.getWidth()) + " " + text;
 
     Paint paint = new Paint(bgPaint);
