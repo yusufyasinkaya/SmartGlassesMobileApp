@@ -1,25 +1,30 @@
-# 3D Sound Synthesizer Mobile App Assistant for Blind People
-The function of this app is to synthesize texts that are coming from object detection into 3D sound objects. This is a demo project that changes stereo channels related to the object center positions inside camera frame. 
+# A 3D Sound Synthesizer Mobile App Assistant for the Visually Impaired
+The purpose of this mobile application is to synthesize textual information obtained from object detection into 3D sound representations. Specifically, the app modifies stereo channels based on the positions of detected objects within the camera frame.
 
-The main purpose of this demo app is to make blind people able to understand the positions of the objects in front of them without needing to touch or getting close to those objects.
+## Objective
+The primary goal of this demo application is to enhance the spatial awareness of blind individuals by enabling them to perceive the positions of objects in their environment without relying on physical touch or close proximity.
 
-## Formula
-Human brain is able to understand the direction that is coming to the ears. One of the actual reasons human brain is able to do it is that both ears are actually hearing the sounds coming from around. When one ear hears less than the other, our brains can manage to realize how much left or how much right the sound is coming from. But it would not be possible to achieve this kind of functionality this good with only one ear.
+## The Brain’s Ability to Discern Directional Sound
+The human brain possesses the remarkable ability to determine the direction from which sounds originate. This capability is partly attributed to the fact that both ears receive auditory input from the surrounding environment. When one ear receives less sound than the other, our brains can infer whether a sound source is to the left or right. However, achieving accurate directional perception with only one ear is challenging.
 
-We have decided to use a formula in order to be able to realize the object positions in horizontal axis when they are synthesized into sounds by the app.   
+## The Formula for Directional Sound Synthesis
+To achieve directional sound representation, we employ a formula that relates object positions in the horizontal axis to synthesized audio cues within the app:
 
-Here is the formula that is being used in the project in order to achieve directional sound:
+1. Camera Maximum X-coordinate (_camMaxX_): Represents the range of possible horizontal positions within the camera frame, spanning from 0 to the camera resolution width (camResolutionX).
 
->$camMaxX$ is in between: $[0, camResolutionX]$
+2. Object Center X-coordinate (_objectCenterX_): Denotes the horizontal position of the object being synthesized into sound. It also falls within the range of [0, camMaxX].
 
->$objectCenterX$ is between $[0, camMaxX]$
+3. Volume Scaling (_volumeX_): Calculated as the ratio of objectCenterX to camMaxX. This value determines the relative volume of the synthesized sound for each channel.
+   >$volumeX=(objectCenterX)/(camMaxX)$
 
->$volumeMax=(objectCenterX)/(camMaxX)$
 
-Finally "volumeMax" variable is being used be calculate channel volume multipliers using this strategy:
+Finally, we use the following channel volume multipliers:
 
->$leftChannelMultiplier = 1 - volumeMax$
+**Left Channel Multiplier:** $1−volumeX$
 
->$rightChannelMultiplier = volumeMax$
+**Right Channel Multiplier:** $volumeX$
 
 ## User Tests:
+To assess the efficacy of our approach, we conducted user testing sessions. Participants, while blindfolded, interacted with the app to evaluate its capability in conveying object positions through 3D sound cues. These tests provided valuable insights into the app’s performance and its potential impact on enhancing spatial awareness for visually impaired users. The results contribute to our understanding of how well the app achieves its intended purpose.
+
+Video of one of the tests: (will be uploaded)
