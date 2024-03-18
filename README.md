@@ -1,6 +1,8 @@
 # A 3D Sound Synthesizer Mobile App Assistant for the Visually Impaired
 The purpose of this mobile application is to synthesize textual information obtained from object detection into 3D sound representations. Specifically, the app modifies stereo channels based on the positions of detected objects within the camera frame.
 
+The base project is derived from YOLO TF Lite project and the model is being used is YOLO Tiny.
+
 ## Objective
 The primary goal of this demo application is to enhance the spatial awareness of blind individuals by enabling them to perceive the positions of objects in their environment without relying on physical touch or close proximity.
 
