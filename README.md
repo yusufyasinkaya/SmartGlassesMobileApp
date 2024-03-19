@@ -29,4 +29,4 @@ Finally, we use the following channel volume multipliers:
 ## User Tests:
 To assess the efficacy of our approach, we conducted user testing sessions. Participants, while blindfolded, interacted with the app to evaluate its capability in conveying object positions through 3D sound cues. These tests provided valuable insights into the app’s performance and its potential impact on enhancing spatial awareness for visually impaired users. The results contribute to our understanding of how well the app achieves its intended purpose.
 
-Video of one of the tests: (will be uploaded)
+Video of one of the tests: https://youtu.be/1OMR2CmaAEw
