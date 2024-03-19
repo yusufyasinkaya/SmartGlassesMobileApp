@@ -31,4 +31,4 @@ To assess the efficacy of our approach, we conducted user testing sessions. Part
 
 Video of one of the tests: https://youtu.be/1OMR2CmaAEw
 
-This project is supported within the scope of TÜBİTAK 2209-A program.
+**This project is supported within the scope of TÜBİTAK 2209-A program.**
